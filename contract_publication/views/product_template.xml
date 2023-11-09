@@ -21,6 +21,7 @@
                     class="oe_stat_button"
                     attrs="{'invisible': [('publication','=',False)]}"
                     icon="fa-truck"
+                    string="Distribution List"
                     >
                     <span>Distribution</span>
                 </button>

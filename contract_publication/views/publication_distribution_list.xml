@@ -11,14 +11,17 @@
                 <field name="contract_partner_id" />
                 <group expand="0" string="Group By...">
                     <filter
+                        name="group_by_publication_product"
                         string="Publication"
                         context="{'group_by':'product_id'}"
                         />
                     <filter
+                        name="group_by_publication_recipient"
                         string="Receiving Partner"
                         context="{'group_by':'partner_id'}"
                         />
                     <filter
+                        name="group_by_publication_subscriber"
                         string="Contract Partner"
                         context="{'group_by':'contract_partner_id'}"
                         />
