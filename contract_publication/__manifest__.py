@@ -6,7 +6,7 @@
     "version": "10.0.1.0.0",
     "category": "Contract Management",
     "author": "Therp BV, " "Odoo Community Association (OCA)",
-    "website": "https://github.com/oca/contract",
+    "website": "https://github.com/OCA/contract",
     "license": "AGPL-3",
     "summary": "Maintain electronic or print publications for your relations.",
     "depends": [
