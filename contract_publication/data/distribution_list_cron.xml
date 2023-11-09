@@ -16,7 +16,7 @@
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
-        <field name="model" eval="'account.analytic.invoice.line'"/>
+        <field name="model" eval="'contract.line'"/>
         <field name="function" eval="'cron_compute_publication'"/>
         <field name="args" eval="'()'"/>
     </record>

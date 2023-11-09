@@ -81,8 +81,8 @@ class TestPublication(common.SavepointCase):
             }
         )
         # Create contract that will be subscription from the beginning:
-        contract_model = cls.env["account.analytic.account"]
-        line_model = cls.env["account.analytic.invoice.line"]
+        contract_model = cls.env["contract"]
+        line_model = cls.env["contract.line"]
         cls.contract_jan = contract_jan = contract_model.create(
             {
                 "name": "Test Contract Jan",
@@ -95,7 +95,7 @@ class TestPublication(common.SavepointCase):
         )
         cls.line_newsletter = line_model.create(
             {
-                "analytic_account_id": contract_jan.id,
+                "contract_id": contract_jan.id,
                 "product_id": product_newsletter.id,
                 "name": "Newsletter subscription",
                 "quantity": 40,
@@ -117,7 +117,7 @@ class TestPublication(common.SavepointCase):
         )
         cls.line_book = line_model.create(
             {
-                "analytic_account_id": contract_piet.id,
+                "contract_id": contract_piet.id,
                 "product_id": product_book.id,
                 "name": "Newsletter subscription",
                 "quantity": 1,

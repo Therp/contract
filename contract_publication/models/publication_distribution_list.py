@@ -7,14 +7,14 @@ from odoo.exceptions import ValidationError
 
 
 SQL_CONTRACT_COUNT = """\
-SELECT COALESCE(SUM(ROUND(aail.quantity)::integer), 0) as quantity
- FROM account_analytic_invoice_line aail
- JOIN account_analytic_account aaa
- ON aail.analytic_account_id = aaa.id
- WHERE aail.product_id = %s
-   AND aaa.partner_id = %s
-   AND (aaa.date_start IS NULL OR DATE(aaa.date_start) <= CURRENT_DATE)
-   AND (aaa.date_end IS NULL OR DATE(aaa.date_end) > CURRENT_DATE)
+SELECT COALESCE(SUM(ROUND(cl.quantity)::integer), 0) as quantity
+ FROM contract_line cl
+ JOIN contract cn
+ ON cl.contract_id = cn.id
+ WHERE cl.product_id = %s
+   AND cn.partner_id = %s
+   AND (cn.date_start IS NULL OR DATE(cn.date_start) <= CURRENT_DATE)
+   AND (cn.date_end IS NULL OR DATE(cn.date_end) > CURRENT_DATE)
 """
 
 SQL_ASSIGNED_COUNT = """\
@@ -31,19 +31,19 @@ DISTRIBUTION_ANALYSIS_STATEMENT = """\
 -- First select all publication lines
 WITH publication_lines AS (
  SELECT
-     aaa.partner_id, aail.product_id, pt.default_code,
-     COALESCE(SUM(ROUND(aail.quantity)::integer), 0) as quantity
- FROM account_analytic_invoice_line aail
- JOIN account_analytic_account aaa
-     ON aail.analytic_account_id = aaa.id
+     cn.partner_id, cl.product_id, pt.default_code,
+     COALESCE(SUM(ROUND(cl.quantity)::integer), 0) as quantity
+ FROM contract_line cl
+ JOIN contract cn
+     ON cl.contract_id = cn.id
  JOIN product_product pp
-     ON aail.product_id = pp.id
+     ON cl.product_id = pp.id
  JOIN product_template pt
      ON pp.product_tmpl_id = pt.id
  WHERE pt.publication AND pt.distribution_type = 'print'
-   AND (aaa.date_start IS NULL OR DATE(aaa.date_start) <= CURRENT_DATE)
-   AND (aaa.date_end IS NULL OR DATE(aaa.date_end) > CURRENT_DATE)
- GROUP BY aaa.partner_id, aail.product_id, pt.default_code
+   AND (cn.date_start IS NULL OR DATE(cn.date_start) <= CURRENT_DATE)
+   AND (cn.date_end IS NULL OR DATE(cn.date_end) > CURRENT_DATE)
+ GROUP BY cn.partner_id, cl.product_id, pt.default_code
  ),
  -- Then select distribution lines
  distribution_lines AS (
@@ -176,11 +176,11 @@ class PublicationDistributionList(models.Model):
             # If product not yet selected, no limit on partner selection.
             return {"domain": {"contract_partner_id": []}}
         valid_partners = []
-        line_model = self.env["account.analytic.invoice.line"]
+        line_model = self.env["contract.line"]
         lines = line_model.search([("product_id", "=", self.product_id.id)])
         for line in lines:
-            if line.analytic_account_id.partner_id.id not in valid_partners:
-                valid_partners.append(line.analytic_account_id.partner_id.id)
+            if line.contract_id.partner_id.id not in valid_partners:
+                valid_partners.append(line.contract_id.partner_id.id)
         if not valid_partners:
             raise ValidationError(
                 _("There are no active subscriptions for this publication.")
@@ -190,7 +190,7 @@ class PublicationDistributionList(models.Model):
 
     @api.model
     def create(self, vals):
-        result = super(PublicationDistributionList, self).create(vals)
+        result = super().create(vals)
         self._update_contract_partner_copies(
             result.product_id,
             result.contract_partner_id,
@@ -204,7 +204,7 @@ class PublicationDistributionList(models.Model):
             if "product_id" in vals
             else []
         )
-        result = super(PublicationDistributionList, self).write(vals)
+        result = super().write(vals)
         needs_update = set(
             ["product_id", "partner_id", "contract_partner_id", "copies"]
         ) & set(vals.keys())
@@ -224,7 +224,7 @@ class PublicationDistributionList(models.Model):
     @api.multi
     def unlink(self):
         updates = set(self.mapped(lambda x: (x.product_id, x.contract_partner_id)))
-        result = super(PublicationDistributionList, self).unlink()
+        result = super().unlink()
         for product, partner in updates:
             self._update_contract_partner_copies(product, partner)
         return result

@@ -149,8 +149,6 @@ msgstr "Aantal exemplaren"
 
 #. module: contract_publication
 #: model:ir.model,name:publication.model_res_partner
-#: model:ir.model.fields,field_description:publication.field_account_analytic_contract_line_partner_id
-#: model:ir.model.fields,field_description:publication.field_account_analytic_invoice_line_partner_id
 msgid "Partner"
 msgstr "Relatie"
 
@@ -247,8 +245,6 @@ msgid "Subscription contract lines"
 msgstr "Abonnementen"
 
 #. module: contract_publication
-#: model:ir.model.fields,field_description:publication.field_account_analytic_contract_line_publication
-#: model:ir.model.fields,field_description:publication.field_account_analytic_invoice_line_publication
 msgid "Subscription product line"
 msgstr "Contractregel voor abonnement"
 
@@ -270,8 +266,7 @@ msgid "Year(s)"
 msgstr "Jaar(en)"
 
 #. module: contract_publication
-#: model:ir.model,name:publication.model_account_analytic_invoice_line
-msgid "account.analytic.invoice.line"
+msgid "contract.line"
 msgstr ""
 
 #. module: contract_publication

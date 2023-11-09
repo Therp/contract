@@ -17,7 +17,7 @@
         <field name="name">Recompute distribution_list</field>
         <field name="model_id" ref="model_res_partner"/>
         <field name="code">
-            env['publication.distribution.list'].cron_compute_distribution_list()
+            env"publication.distribution.list"].cron_compute_distribution_list()
         </field>
     </record>
 
@@ -36,7 +36,7 @@
         <field name="name">Recompute publication</field>
         <field name="model_id" ref="model_res_partner"/>
         <field name="code">
-            env['account.analytic.invoice.line'].cron_compute_publication()
+            env["contract.line"].cron_compute_publication()
         </field>
     </record>
 

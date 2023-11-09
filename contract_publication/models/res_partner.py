@@ -7,7 +7,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     subscription_ids = fields.One2many(
-        comodel_name="account.analytic.invoice.line",
+        comodel_name="contract.line",
         inverse_name="partner_id",
         domain=[("publication", "=", True)],
         string="Subscription contract lines",
